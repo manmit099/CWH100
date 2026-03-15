@@ -778,7 +778,20 @@
       </div>
     </div>
   </section>
-
+// generate buttons day 1..100
+for (let i = 1; i <= 100; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'day-grid-btn';
+  btn.textContent = `DAY ${i.toString().padStart(2, '0')}`;
+  btn.addEventListener('click', () => {
+    if (btn.textContent === 'DAY 01') {
+      window.location.href = 'https://manmit099.github.io/CWH100/';
+    } else {
+      modal.style.display = 'none';
+    }
+  });
+  dayGrid.appendChild(btn);
+}
   <!-- 03 Syntax explained (from PDF table) -->
   <section id="syntax-section" class="reveal-section">
     <div class="sec-header"><span class="sec-num">[03]</span><h2 class="sec-title">Syntax explained</h2></div>
