@@ -664,7 +664,7 @@
 <div class="wrap">
   <div class="hero">
     <h1>Introduction To Python</h1>
-    <div class="hero-meta">📘 Day 1 · 100 Days Of Code · CWHxMANMIT</div>
+    <div class="hero-meta">📘 Day 1 · 100 Days Of Code · study notes</div>
   </div>
 
   <!-- minimal navigation -->
@@ -857,17 +857,7 @@
 </div>
 
 <footer>
-  <i class="fab fa-python" style="margin-right:8px;"></i>
-  Python · Day 01 · 100 Days Of Code · refined notes
-  <br><br>
-  <span style="color:#777;font-size:12px;">
-    Notes inspired by the tutorial by Code With Harry —
-    <a href="https://youtu.be/7wnove7K-ZQ?si=nV5Tx0kfjl4lIHtX"
-       target="_blank"
-       style="color:#5f8cff;text-decoration:none;">
-       Visit the YT lecture of Day 1
-    </a>
-  </span>
+  <i class="fab fa-python" style="margin-right:8px;"></i> Python · Day 01 · 100 Days Of Code · refined notes
 </footer>
 
 <!-- modal for day selection (same as Day6, keeps DAY 01 pill) -->
@@ -933,7 +923,11 @@ for (let i = 1; i <= 100; i++) {
   btn.className = 'day-grid-btn';
   btn.textContent = `DAY ${i.toString().padStart(2, '0')}`;
   btn.addEventListener('click', () => {
-    modal.style.display = 'none';
+    if (btn.textContent === 'DAY 01') {
+      window.location.href = 'https://manmit099.github.io/CWH100/Day1/';
+    } else {
+      modal.style.display = 'none';
+    }
   });
   dayGrid.appendChild(btn);
 }
@@ -953,4 +947,4 @@ modal.addEventListener('click', (e) => {
 });
 </script>
 </body>
-</html>
+  </html>
