@@ -35,6 +35,63 @@
       --display: 'Syne', sans-serif;
     }
 
+    /* light theme overrides – added without touching original selectors */
+    .light-mode {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: #cbd5e1;
+      --blue: #2563eb;
+      --blue-glow: rgba(37, 99, 235, 0.2);
+      --yellow: #fbbf24;
+      --red: #ef4444;
+      --green: #10b981;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --code-bg: #f1f5f9;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* adjust day pill and other components for light mode */
+    .light-mode .day-pill {
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      color: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .light-mode .concept-card {
+      background: var(--surface);
+    }
+
+    .light-mode .code-card {
+      background: var(--surface);
+    }
+
+    .light-mode .output-area {
+      background: #eef2f6;
+      color: #1e293b;
+    }
+
+    .light-mode .syntax-table th {
+      background: #e2e8f0;
+    }
+
+    .light-mode .step-badge {
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      color: var(--blue);
+    }
+
+    .light-mode .step-badge.tip-badge {
+      color: #b45309;
+      border-color: #fbbf24;
+    }
+
+    .light-mode .step-badge.warn-badge {
+      color: #b91c1c;
+      border-color: #ef4444;
+    }
+
     body {
       background: var(--bg);
       color: var(--text-primary);
@@ -42,6 +99,7 @@
       line-height: 1.6;
       font-size: 15px;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.2s ease;
     }
 
     /* subtle noise */
@@ -83,6 +141,11 @@
       width: 100%;
     }
 
+    .light-mode header {
+      background: rgba(255, 255, 255, 0.7);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
     .snake-icon {
       font-size: 28px;
       background: linear-gradient(135deg, #4584b6 0%, #4584b6 40%, #ffde57 60%, #ffde57 100%);
@@ -90,6 +153,20 @@
       background-clip: text;
       color: transparent;
       filter: drop-shadow(0 0 4px rgba(69,132,182,0.6));
+    }
+
+    /* ----- theme toggle button (matches day pill radius) ----- */
+    .theme-toggle {
+      margin-right: 8px;  /* breathing space before header-right */
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .theme-toggle i {
+      font-size: 16px;
     }
 
     /* right side group: day pill + logos + separator */
@@ -164,6 +241,14 @@
       background-clip: text;
       color: transparent;
       letter-spacing: -0.02em;
+    }
+
+    /* make main heading visible in light mode */
+    .light-mode .hero h1 {
+      background: linear-gradient(135deg, #0f172a 0%, #2563eb 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     .hero h1 span {
@@ -260,6 +345,10 @@
       letter-spacing: -0.01em;
     }
 
+    .light-mode .sec-title {
+      color: #0f172a;
+    }
+
     /* concept cards */
     .concept-grid {
       display: grid;
@@ -329,6 +418,9 @@
       background: #0d0d0d;
       border-bottom: 1px solid var(--border);
     }
+    .light-mode .code-header {
+      background: #e2e8f0;
+    }
     .window-dots {
       display: flex;
       gap: 6px;
@@ -348,6 +440,9 @@
       font-size: 12px;
       color: #aaa;
     }
+    .light-mode .code-title {
+      color: #334155;
+    }
     .action-buttons {
       margin-left: auto;
       display: flex;
@@ -366,6 +461,9 @@
       display: flex;
       align-items: center;
       gap: 5px;
+    }
+    .light-mode .run-btn, .light-mode .copy-btn {
+      color: #1e293b;
     }
     .run-btn:hover {
       background: var(--green);
@@ -506,6 +604,9 @@
       font-weight: 700;
       color: white;
       margin-bottom: 5px;
+    }
+    .light-mode .step-title {
+      color: #0f172a;
     }
     .step-desc {
       font-size: 14px;
@@ -649,6 +750,10 @@
 <body>
 <header>
   <i class="fab fa-python snake-icon"></i>
+  <!-- day/night toggle button – matches day-pill radius and style -->
+  <button class="theme-toggle day-pill" id="themeToggle" aria-label="Switch between dark and light mode">
+    <i class="fas fa-moon"></i> <!-- initial dark mode moon -->
+  </button>
   <div class="header-right">
     <!-- day pill first -->
     <span class="day-pill" id="dayPillBtn"><i class="far fa-calendar-alt" style="margin-right:6px;"></i>DAY 01</span>
@@ -870,7 +975,7 @@
   </span>
 </footer>
 
-<!-- modal for day selection (same as Day6, keeps DAY 01 pill) -->
+<!-- modal for day selector (same as Day6, keeps DAY 01 pill) -->
 <div class="modal-overlay" id="dayModal">
   <div class="modal-content">
     <button class="modal-close" id="closeModalBtn">&times;</button>
@@ -953,6 +1058,18 @@ closeBtn.addEventListener('click', () => {
 modal.addEventListener('click', (e) => {
   if (e.target === modal) {
     modal.style.display = 'none';
+  }
+});
+
+// day/night toggle functionality
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  const icon = themeToggle.querySelector('i');
+  if (document.body.classList.contains('light-mode')) {
+    icon.className = 'fas fa-sun';   // sun for light mode
+  } else {
+    icon.className = 'fas fa-moon';  // moon for dark mode
   }
 });
 </script>
