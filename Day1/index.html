@@ -3,10 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Updated title for clean social sharing (removes "pure black + run toggle") -->
-  <title>Day 1: Introduction to Python | 100 Days of Code</title>
-  <!-- Optional meta description for better previews -->
-  <meta name="description" content="Learn Python basics: first program, REPL, installation tips, and code examples. Day 1 of 100 Days of Code challenge.">
+  <title>Day 1 · Introduction To Python · CWHxMANMIT</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -38,7 +35,7 @@
       --display: 'Syne', sans-serif;
     }
 
-    /* light theme overrides – added without touching original selectors */
+    /* light theme overrides */
     .light-mode {
       --bg: #f8fafc;
       --surface: #ffffff;
@@ -55,7 +52,6 @@
       --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.2);
     }
 
-    /* adjust day pill and other components for light mode */
     .light-mode .day-pill {
       background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
       color: var(--blue);
@@ -105,7 +101,6 @@
       transition: background-color 0.3s ease, color 0.2s ease;
     }
 
-    /* subtle noise */
     body::before {
       content: "";
       position: fixed;
@@ -130,7 +125,6 @@
       padding: 0 24px 80px;
     }
 
-    /* header – now scrolls with page (non‑sticky) */
     header {
       background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(16px);
@@ -158,9 +152,8 @@
       filter: drop-shadow(0 0 4px rgba(69,132,182,0.6));
     }
 
-    /* ----- theme toggle button (matches day pill radius) ----- */
     .theme-toggle {
-      margin-right: 8px;  /* breathing space before header-right */
+      margin-right: 8px;
       border: none;
       cursor: pointer;
       transition: all 0.2s;
@@ -172,7 +165,6 @@
       font-size: 16px;
     }
 
-    /* right side group: day pill + logos + separator */
     .header-right {
       display: flex;
       align-items: center;
@@ -183,7 +175,7 @@
     .circular-logo {
       width: 36px;
       height: 36px;
-      border-radius: 40px; /* match day-pill border-radius */
+      border-radius: 40px;
       object-fit: cover;
       border: 2px solid var(--blue);
       box-shadow: 0 0 8px var(--blue-glow);
@@ -211,14 +203,13 @@
       transform: scale(1.02);
     }
 
-    /* separator X between logos */
     .separator-x {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 24px;
       height: 24px;
-      border-radius: 40px; /* same pill shape */
+      border-radius: 40px;
       background: rgba(95,140,255,0.1);
       border: 1px solid var(--blue);
       color: var(--blue);
@@ -228,7 +219,6 @@
       box-shadow: 0 0 6px var(--blue-glow);
     }
 
-    /* hero */
     .hero {
       padding: 64px 0 40px;
       text-align: center;
@@ -237,4 +227,818 @@
     .hero h1 {
       font-family: var(--display);
       font-size: clamp(34px, 8vw, 62px);
-      font-weight:
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 0%, #bdd3ff 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+    }
+
+    .light-mode .hero h1 {
+      background: linear-gradient(135deg, #0f172a 0%, #2563eb 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--blue), #a6c1ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-meta {
+      font-family: var(--mono);
+      color: var(--text-secondary);
+      margin-top: 12px;
+      font-size: 13px;
+      border-bottom: 1px dashed var(--border);
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+
+    .concept-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 30px 0 10px;
+      padding: 10px 0;
+    }
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 18px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-btn i {
+      font-size: 12px;
+      color: var(--blue);
+      opacity: 0.8;
+    }
+    .nav-btn:hover {
+      border-color: var(--blue);
+      color: white;
+      background: rgba(95,140,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    section {
+      scroll-margin-top: 80px;
+    }
+
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+    .reveal-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .sec-header {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      margin: 56px 0 24px;
+    }
+    .sec-num {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      background: rgba(95,140,255,0.1);
+      border: 1px solid rgba(95,140,255,0.3);
+      padding: 4px 14px;
+      border-radius: 30px;
+      white-space: nowrap;
+    }
+    .sec-title {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.01em;
+    }
+    .light-mode .sec-title {
+      color: #0f172a;
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .concept-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      transition: all 0.2s;
+      border-left: 3px solid var(--blue);
+    }
+    .concept-card:hover {
+      background: var(--surface-hover);
+      transform: translateY(-2px);
+      border-color: var(--blue);
+    }
+    .concept-title {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .concept-title i {
+      font-size: 16px;
+      width: 22px;
+      color: var(--blue);
+    }
+    .concept-body {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .concept-body code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: var(--code-bg);
+      color: var(--yellow);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .code-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .code-card {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      background: #0d0d0d;
+      border-bottom: 1px solid var(--border);
+    }
+    .light-mode .code-header {
+      background: #e2e8f0;
+    }
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .window-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green { background: #28c840; }
+
+    .code-title {
+      margin-left: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #aaa;
+    }
+    .light-mode .code-title {
+      color: #334155;
+    }
+    .action-buttons {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .run-btn, .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: #ccc;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .light-mode .run-btn, .light-mode .copy-btn {
+      color: #1e293b;
+    }
+    .run-btn:hover {
+      background: var(--green);
+      border-color: var(--green);
+      color: black;
+    }
+    .run-btn.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: black;
+    }
+    .copy-btn:hover {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: black;
+    }
+    .code-card pre {
+      padding: 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+      background: var(--code-bg);
+      margin: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .output-area {
+      background: #0a0a0a;
+      padding: 14px 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: #b0e0b0;
+      border-top: 1px solid var(--border);
+      white-space: pre-wrap;
+      display: none;
+    }
+    .output-area.show {
+      display: block;
+    }
+
+    .kw  { color: #c792ea; }
+    .fn  { color: #82aaff; }
+    .str { color: #c3e88d; }
+    .num { color: #f78c6c; }
+    .cmt { color: #546e7a; font-style: italic; }
+    .out { color: #5f8cff; }
+    .err { color: #f87171; }
+
+    .syntax-table {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .syntax-table table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+    }
+    .syntax-table th {
+      background: #0d0d0d;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--blue);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 14px 18px;
+      text-align: left;
+    }
+    .syntax-table td {
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+    .syntax-table td:first-child {
+      font-family: var(--mono);
+      color: var(--yellow);
+    }
+
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .step-item {
+      display: flex;
+      gap: 16px;
+    }
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50px;
+      flex-shrink: 0;
+    }
+    .step-badge {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(145deg, #202532, #12161f);
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      box-shadow: 0 0 10px var(--blue-glow);
+    }
+    .step-badge.tip-badge {
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+    .step-badge.warn-badge {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .step-line {
+      width: 2px;
+      background: var(--border);
+      flex: 1;
+      margin: 4px 0;
+      min-height: 20px;
+    }
+    .step-item:last-child .step-line { display: none; }
+    .step-content {
+      padding: 4px 0 28px 8px;
+      flex: 1;
+    }
+    .step-title {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 5px;
+    }
+    .light-mode .step-title {
+      color: #0f172a;
+    }
+    .step-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .step-desc code {
+      font-family: var(--mono);
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: var(--yellow);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .summary-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      transition: 0.15s;
+    }
+    .summary-item:hover {
+      background: var(--surface-hover);
+      border-color: var(--blue);
+    }
+    .summary-item i {
+      color: var(--green);
+      font-size: 16px;
+      margin-top: 2px;
+    }
+    .summary-item code {
+      font-family: var(--mono);
+      background: var(--code-bg);
+      color: var(--yellow);
+      padding: 1px 5px;
+      border-radius: 5px;
+    }
+
+    footer {
+      margin-top: 80px;
+      border-top: 1px solid var(--border);
+      padding: 28px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #666;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 28px 24px;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 24px;
+      cursor: pointer;
+      transition: 0.2s;
+      line-height: 1;
+    }
+    .modal-close:hover {
+      color: var(--blue);
+    }
+    .modal-title {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: white;
+    }
+    .day-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 10px;
+    }
+    .day-grid-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .day-grid-btn:hover {
+      border-color: var(--blue);
+      color: white;
+      background: rgba(95,140,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      .concept-grid { grid-template-columns: 1fr; }
+      .concept-nav .nav-btn { padding: 4px 12px; font-size: 11px; }
+      .modal-content { padding: 20px 16px; }
+      .day-grid { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
+      .day-grid-btn { padding: 6px 4px; font-size: 11px; }
+      .header-right { gap: 8px; }
+      .circular-logo { width: 32px; height: 32px; }
+      .separator-x { width: 22px; height: 22px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <i class="fab fa-python snake-icon"></i>
+  <button class="theme-toggle day-pill" id="themeToggle" aria-label="Switch between dark and light mode">
+    <i class="fas fa-moon"></i>
+  </button>
+  <div class="header-right">
+    <span class="day-pill" id="dayPillBtn"><i class="far fa-calendar-alt" style="margin-right:6px;"></i>DAY 01</span>
+    <img src="logo01.jpg" alt="logo 1" class="circular-logo">
+    <span class="separator-x">×</span>
+    <img src="logo02.jpg" alt="logo 2" class="circular-logo">
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>Introduction To Python</h1>
+    <div class="hero-meta">📘 Day 1 · 100 Days Of Code · CWHxMANMIT</div>
+  </div>
+
+  <div class="concept-nav">
+    <a class="nav-btn" href="#concept-section"><i class="fas fa-cube"></i> Concept</a>
+    <a class="nav-btn" href="#code-section"><i class="fas fa-code"></i> Code</a>
+    <a class="nav-btn" href="#syntax-section"><i class="fas fa-hashtag"></i> Syntax</a>
+    <a class="nav-btn" href="#tips-section"><i class="fas fa-lightbulb"></i> Tips</a>
+    <a class="nav-btn" href="#walkthrough-section"><i class="fas fa-stairs"></i> Walkthrough</a>
+    <a class="nav-btn" href="#summary-section"><i class="fas fa-check-double"></i> Summary</a>
+  </div>
+
+  <!-- 01 Concept explanations (from Python_Day1_Notes.pdf) -->
+  <section id="concept-section" class="reveal-section visible">
+    <div class="sec-header"><span class="sec-num">[01]</span><h2 class="sec-title">Concept explanations</h2></div>
+    <div class="concept-grid">
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-code"></i>Programming</div><div class="concept-body">Programming is a way to tell computers what to do. We communicate with computers using programming languages, just like we use Hindi, English, or Spanish. Examples: Python, C, C++, Java.</div></div>
+      <div class="concept-card"><div class="concept-title"><i class="fab fa-python"></i>Python</div><div class="concept-body">Python is a dynamically typed, general‑purpose, high‑level programming language that supports object‑oriented and functional paradigms. It is interpreted, meaning it runs line by line. Guido van Rossum began working on it in 1989; it was released around 1991.</div></div>
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-globe"></i>Replit</div><div class="concept-body">Replit is a collaborative, browser‑based IDE. You can write and run Python code in your browser without installing anything on your computer. Files and projects in Replit are called "repls".</div></div>
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-terminal"></i>Python REPL</div><div class="concept-body">REPL stands for Read‑Evaluate‑Print Loop. It is an interactive shell where you can type Python commands and see results immediately. Access it in the terminal by typing "python3". Exit with exit().</div></div>
+    </div>
+  </section>
+
+  <!-- 02 Code examples (from CWH video, based on PDF) -->
+  <section id="code-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[02]</span><h2 class="sec-title">Code examples (from video)</h2></div>
+    <div class="code-showcase">
+
+      <!-- hello.py -->
+      <div class="code-card" id="card-hello">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">hello.py</span>
+          <div class="action-buttons">
+            <button class="run-btn" onclick="runCode(this)"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="fn">print</span>(<span class="str">"Hello World"</span>)</pre>
+        <div class="output-data" style="display:none;">Hello World</div>
+        <div class="output-area"></div>
+      </div>
+
+      <!-- number.py -->
+      <div class="code-card" id="card-number">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">number.py</span>
+          <div class="action-buttons">
+            <button class="run-btn" onclick="runCode(this)"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="fn">print</span>(<span class="num">5</span>)</pre>
+        <div class="output-data" style="display:none;">5</div>
+        <div class="output-area"></div>
+      </div>
+
+      <!-- first_program.py (combined) -->
+      <div class="code-card" id="card-first">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">first_program.py</span>
+          <div class="action-buttons">
+            <button class="run-btn" onclick="runCode(this)"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="fn">print</span>(<span class="str">"Hello World"</span>)
+<span class="fn">print</span>(<span class="num">5</span>)</pre>
+        <div class="output-data" style="display:none;">Hello World
+5</div>
+        <div class="output-area"></div>
+      </div>
+
+      <!-- terminal_repl.py (simulated terminal session) -->
+      <div class="code-card" id="card-terminal">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">terminal_repl.py</span>
+          <div class="action-buttons">
+            <button class="run-btn" onclick="runCode(this)"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt"># In terminal:</span>
+<span class="cmt"># $ python3</span>
+<span class="cmt"># >>> print("Hello")</span>
+<span class="cmt"># Hello</span>
+<span class="cmt"># >>> exit()</span></pre>
+        <div class="output-data" style="display:none;">(Terminal session – not runnable)</div>
+        <div class="output-area"></div>
+      </div>
+
+      <!-- exit_repl.py -->
+      <div class="code-card" id="card-exit">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">exit_repl.py</span>
+          <div class="action-buttons">
+            <button class="run-btn" onclick="runCode(this)"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="fn">exit</span>()</pre>
+        <div class="output-data" style="display:none;">(exits the REPL)</div>
+        <div class="output-area"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Syntax explained (from PDF table) -->
+  <section id="syntax-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[03]</span><h2 class="sec-title">Syntax explained</h2></div>
+    <div class="syntax-table">
+      <table><thead><tr><th>SYNTAX</th><th>DESCRIPTION</th></tr></thead><tbody>
+        <tr><td>print("text")</td><td>Prints text to the console</td></tr>
+        <tr><td>print(number)</td><td>Prints a number to the console</td></tr>
+        <tr><td>exit()</td><td>Exits the Python REPL / interactive shell</td></tr>
+        <tr><td>python3</td><td>Command to launch Python 3 in the terminal</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 04 Tips & Warnings (from PDF) -->
+  <section id="tips-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[04]</span><h2 class="sec-title">Tips & Warnings</h2></div>
+    <div class="steps-container">
+      <!-- tips (yellow) -->
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Use Replit if your computer is slow – all you need is a browser tab.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">On Windows, tick the <code>Add Python to PATH</code> checkbox during installation.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Use <code>python3</code> (not <code>python</code>) in the terminal on Linux/Mac to avoid errors.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Bookmark the 100 Days of Code Python playlist so you never miss a day.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">The Python REPL (<code>python3</code>) lets you use Python as a quick calculator.</div></div>
+      </div>
+      <!-- warnings (red) -->
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">On Windows: forgetting to check <code>Add Python to PATH</code> means Python won't work in the terminal.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Step-by-step walkthrough (from PDF page 3) -->
+  <section id="walkthrough-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[05]</span><h2 class="sec-title">Step-by‑step walkthrough</h2></div>
+    <div class="steps-container">
+      <div class="step-item"><div class="step-left"><div class="step-badge">01</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Open Replit</div><div class="step-desc">Create a new Repl for Python. (Or open main.py if it exists.)</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">02</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Open main.py</div><div class="step-desc">The editor shows the file where you'll type your code.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">03</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">First program</div><div class="step-desc">Type <code>print("Hello World")</code> → output shows <strong>Hello World</strong></div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">04</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Click Run</div><div class="step-desc">Output appears on the right panel.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">05</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Print a number</div><div class="step-desc">Change the code to <code>print(5)</code> → output shows <strong>5</strong></div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">06</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Run again</div><div class="step-desc">Click Run to see the number printed.</div></div></div>
+    </div>
+  </section>
+
+  <!-- 06 Quick summary (from PDF page 3) -->
+  <section id="summary-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[06]</span><h2 class="sec-title">Quick summary</h2></div>
+    <div class="summary-grid">
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Python = dynamically typed, high‑level, interpreted, general‑purpose language.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Created by Guido van Rossum; development started 1989, released ~1991.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Named after "Monty Python's Flying Circus".</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Features: simple, platform‑independent, open‑source, huge library support.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Uses: web apps, data science, ML, database, automation, mathematics.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>REPL = Read‑Evaluate‑Print Loop; launch with <code>python3</code> in terminal.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Replit = browser IDE; code files called "repls".</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span><code>print()</code> is the basic output function in Python.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>On Windows installation: always check <code>Add Python to PATH</code>.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>First program: <code>print("Hello World")</code></span></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+   <i class="fab fa-python" style="margin-right:8px;"></i>
+  Python · Day 01 · 100 Days Of Code · refined notes
+  <br><br>
+  <span style="color:#777;font-size:12px;">
+    Notes inspired by the tutorial by Code With Harry —
+    <a href="https://youtu.be/7wnove7K-ZQ?si=Vh0EswoT7MZV_eQl"
+       target="_blank"
+       style="color:#5f8cff;text-decoration:none;">
+       Visit the YT lecture of Day 1
+    </a>
+  </span>
+</footer>
+
+<!-- modal for day selector -->
+<div class="modal-overlay" id="dayModal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <div class="modal-title">📅 Select a day</div>
+    <div class="day-grid" id="dayGrid"></div>
+  </div>
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.closest('.code-card').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = '<i class="fas fa-check"></i> copied';
+    setTimeout(() => btn.innerHTML = '<i class="far fa-copy"></i> copy', 1800);
+  });
+}
+
+function runCode(btn) {
+  const card = btn.closest('.code-card');
+  const outputDiv = card.querySelector('.output-area');
+  const hiddenOutput = card.querySelector('.output-data');
+  
+  if (outputDiv.classList.contains('show')) {
+    outputDiv.classList.remove('show');
+    btn.classList.remove('active');
+  } else {
+    if (hiddenOutput) {
+      outputDiv.textContent = hiddenOutput.textContent.trim();
+    } else {
+      outputDiv.textContent = '✅ (no output)';
+    }
+    outputDiv.classList.add('show');
+    btn.classList.add('active');
+  }
+}
+
+// scroll reveal
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('.reveal-section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -20px 0px' });
+  sections.forEach(section => observer.observe(section));
+});
+
+// modal logic
+const modal = document.getElementById('dayModal');
+const dayPill = document.getElementById('dayPillBtn');
+const closeBtn = document.getElementById('closeModalBtn');
+const dayGrid = document.getElementById('dayGrid');
+
+// generate buttons day 1..100 with individual redirects
+for (let i = 1; i <= 100; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'day-grid-btn';
+  btn.textContent = `DAY ${i.toString().padStart(2, '0')}`;
+  btn.addEventListener('click', () => {
+    window.location.href = `https://manmit099.github.io/CWH100/Day${i}/`;
+  });
+  dayGrid.appendChild(btn);
+}
+
+dayPill.addEventListener('click', () => {
+  modal.style.display = 'flex';
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+// day/night toggle
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  const icon = themeToggle.querySelector('i');
+  if (document.body.classList.contains('light-mode')) {
+    icon.className = 'fas fa-sun';
+  } else {
+    icon.className = 'fas fa-moon';
+  }
+});
+</script>
+</body>
+</html>
