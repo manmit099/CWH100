@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 2 · Python Projects & Features · CWHxMANMIT</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ------- pure black background ------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface-hover: #151515;
+      --border: #2a2a2a;
+      --blue: #5f8cff;
+      --blue-glow: rgba(95, 140, 255, 0.2);
+      --yellow: #ffd966;
+      --red: #f87171;
+      --green: #6fcf97;
+      --text-primary: #f0f0f0;
+      --text-secondary: #b0b3b8;
+      --code-bg: #0a0a0a;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7);
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --display: 'Syne', sans-serif;
+    }
+
+    /* light theme overrides */
+    .light-mode {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: #cbd5e1;
+      --blue: #2563eb;
+      --blue-glow: rgba(37, 99, 235, 0.2);
+      --yellow: #fbbf24;
+      --red: #ef4444;
+      --green: #10b981;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --code-bg: #f1f5f9;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.2);
+    }
+
+    .light-mode .day-pill {
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      color: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .light-mode .concept-card {
+      background: var(--surface);
+    }
+
+    .light-mode .code-card {
+      background: var(--surface);
+    }
+
+    .light-mode .output-area {
+      background: #eef2f6;
+      color: #1e293b;
+    }
+
+    .light-mode .syntax-table th {
+      background: #e2e8f0;
+    }
+
+    .light-mode .step-badge {
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      color: var(--blue);
+    }
+
+    .light-mode .step-badge.tip-badge {
+      color: #b45309;
+      border-color: #fbbf24;
+    }
+
+    .light-mode .step-badge.warn-badge {
+      color: #b91c1c;
+      border-color: #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--sans);
+      line-height: 1.6;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.2s ease;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.25;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #3a3f4a; border-radius: 20px; }
+
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      width: 100%;
+    }
+
+    .light-mode header {
+      background: rgba(255, 255, 255, 0.7);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .snake-icon {
+      font-size: 28px;
+      background: linear-gradient(135deg, #4584b6 0%, #4584b6 40%, #ffde57 60%, #ffde57 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 4px rgba(69,132,182,0.6));
+    }
+
+    .theme-toggle {
+      margin-right: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .theme-toggle i {
+      font-size: 16px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .circular-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 40px;
+      object-fit: cover;
+      border: 2px solid var(--blue);
+      box-shadow: 0 0 8px var(--blue-glow);
+      background: var(--surface);
+    }
+
+    .day-pill {
+      background: linear-gradient(145deg, #1f2535, #131725);
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      box-shadow: 0 0 12px rgba(95,140,255,0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .day-pill:hover {
+      background: #1f2a3f;
+      transform: scale(1.02);
+    }
+
+    .separator-x {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 40px;
+      background: rgba(95,140,255,0.1);
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: bold;
+      font-family: var(--mono);
+      box-shadow: 0 0 6px var(--blue-glow);
+    }
+
+    .hero {
+      padding: 64px 0 40px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: var(--display);
+      font-size: clamp(34px, 8vw, 62px);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 0%, #bdd3ff 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+    }
+
+    .light-mode .hero h1 {
+      background: linear-gradient(135deg, #0f172a 0%, #2563eb 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--blue), #a6c1ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-meta {
+      font-family: var(--mono);
+      color: var(--text-secondary);
+      margin-top: 12px;
+      font-size: 13px;
+      border-bottom: 1px dashed var(--border);
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+
+    .concept-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 30px 0 10px;
+      padding: 10px 0;
+    }
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 18px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-btn i {
+      font-size: 12px;
+      color: var(--blue);
+      opacity: 0.8;
+    }
+    .nav-btn:hover {
+      border-color: var(--blue);
+      color: white;
+      background: rgba(95,140,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    section {
+      scroll-margin-top: 80px;
+    }
+
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+    .reveal-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .sec-header {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      margin: 56px 0 24px;
+    }
+    .sec-num {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      background: rgba(95,140,255,0.1);
+      border: 1px solid rgba(95,140,255,0.3);
+      padding: 4px 14px;
+      border-radius: 30px;
+      white-space: nowrap;
+    }
+    .sec-title {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.01em;
+    }
+    .light-mode .sec-title {
+      color: #0f172a;
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .concept-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      transition: all 0.2s;
+      border-left: 3px solid var(--blue);
+    }
+    .concept-card:hover {
+      background: var(--surface-hover);
+      transform: translateY(-2px);
+      border-color: var(--blue);
+    }
+    .concept-title {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .concept-title i {
+      font-size: 16px;
+      width: 22px;
+      color: var(--blue);
+    }
+    .concept-body {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .concept-body code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: var(--code-bg);
+      color: var(--yellow);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .code-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .code-card {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      background: #0d0d0d;
+      border-bottom: 1px solid var(--border);
+    }
+    .light-mode .code-header {
+      background: #e2e8f0;
+    }
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .window-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green { background: #28c840; }
+
+    .code-title {
+      margin-left: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #aaa;
+    }
+    .light-mode .code-title {
+      color: #334155;
+    }
+    .action-buttons {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .run-btn, .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: #ccc;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .light-mode .run-btn, .light-mode .copy-btn {
+      color: #1e293b;
+    }
+    .run-btn:hover {
+      background: var(--green);
+      border-color: var(--green);
+      color: black;
+    }
+    .run-btn.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: black;
+    }
+    .copy-btn:hover {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: black;
+    }
+    .code-card pre {
+      padding: 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+      background: var(--code-bg);
+      margin: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .output-area {
+      background: #0a0a0a;
+      padding: 14px 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: #b0e0b0;
+      border-top: 1px solid var(--border);
+      white-space: pre-wrap;
+      display: none;
+    }
+    .output-area.show {
+      display: block;
+    }
+
+    .kw  { color: #c792ea; }
+    .fn  { color: #82aaff; }
+    .str { color: #c3e88d; }
+    .num { color: #f78c6c; }
+    .cmt { color: #546e7a; font-style: italic; }
+    .out { color: #5f8cff; }
+    .err { color: #f87171; }
+
+    .syntax-table {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .syntax-table table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+    }
+    .syntax-table th {
+      background: #0d0d0d;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--blue);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 14px 18px;
+      text-align: left;
+    }
+    .syntax-table td {
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+    .syntax-table td:first-child {
+      font-family: var(--mono);
+      color: var(--yellow);
+    }
+
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .step-item {
+      display: flex;
+      gap: 16px;
+    }
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50px;
+      flex-shrink: 0;
+    }
+    .step-badge {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(145deg, #202532, #12161f);
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      box-shadow: 0 0 10px var(--blue-glow);
+    }
+    .step-badge.tip-badge {
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+    .step-badge.warn-badge {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .step-line {
+      width: 2px;
+      background: var(--border);
+      flex: 1;
+      margin: 4px 0;
+      min-height: 20px;
+    }
+    .step-item:last-child .step-line { display: none; }
+    .step-content {
+      padding: 4px 0 28px 8px;
+      flex: 1;
+    }
+    .step-title {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 5px;
+    }
+    .light-mode .step-title {
+      color: #0f172a;
+    }
+    .step-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .step-desc code {
+      font-family: var(--mono);
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: var(--yellow);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .summary-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      transition: 0.15s;
+    }
+    .summary-item:hover {
+      background: var(--surface-hover);
+      border-color: var(--blue);
+    }
+    .summary-item i {
+      color: var(--green);
+      font-size: 16px;
+      margin-top: 2px;
+    }
+    .summary-item code {
+      font-family: var(--mono);
+      background: var(--code-bg);
+      color: var(--yellow);
+      padding: 1px 5px;
+      border-radius: 5px;
+    }
+
+    footer {
+      margin-top: 80px;
+      border-top: 1px solid var(--border);
+      padding: 28px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #666;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 28px 24px;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 24px;
+      cursor: pointer;
+      transition: 0.2s;
+      line-height: 1;
+    }
+    .modal-close:hover {
+      color: var(--blue);
+    }
+    .modal-title {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: white;
+    }
+    .day-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 10px;
+    }
+    .day-grid-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .day-grid-btn:hover {
+      border-color: var(--blue);
+      color: white;
+      background: rgba(95,140,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      .concept-grid { grid-template-columns: 1fr; }
+      .concept-nav .nav-btn { padding: 4px 12px; font-size: 11px; }
+      .modal-content { padding: 20px 16px; }
+      .day-grid { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
+      .day-grid-btn { padding: 6px 4px; font-size: 11px; }
+      .header-right { gap: 8px; }
+      .circular-logo { width: 32px; height: 32px; }
+      .separator-x { width: 22px; height: 22px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <i class="fab fa-python snake-icon"></i>
+  <button class="theme-toggle day-pill" id="themeToggle" aria-label="Switch between dark and light mode">
+    <i class="fas fa-moon"></i>
+  </button>
+  <div class="header-right">
+    <span class="day-pill" id="dayPillBtn"><i class="far fa-calendar-alt" style="margin-right:6px;"></i>DAY 02</span>
+    <img src="logo01.jpg" alt="logo 1" class="circular-logo">
+    <span class="separator-x">×</span>
+    <img src="logo02.jpg" alt="logo 2" class="circular-logo">
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>Python Projects & Features</h1>
+    <div class="hero-meta">📘 Day 2 · 100 Days Of Code · CWHxMANMIT</div>
+  </div>
+
+  <div class="concept-nav">
+    <a class="nav-btn" href="#concept-section"><i class="fas fa-cube"></i> Concept</a>
+    <a class="nav-btn" href="#code-section"><i class="fas fa-code"></i> Code</a>
+    <a class="nav-btn" href="#syntax-section"><i class="fas fa-hashtag"></i> Syntax</a>
+    <a class="nav-btn" href="#tips-section"><i class="fas fa-lightbulb"></i> Tips</a>
+    <a class="nav-btn" href="#walkthrough-section"><i class="fas fa-stairs"></i> Walkthrough</a>
+    <a class="nav-btn" href="#summary-section"><i class="fas fa-check-double"></i> Summary</a>
+  </div>
+
+  <!-- 01 Concept explanations (from D2.pdf) -->
+  <section id="concept-section" class="reveal-section visible">
+    <div class="sec-header"><span class="sec-num">[01]</span><h2 class="sec-title">Concept explanations</h2></div>
+    <div class="concept-grid">
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-briefcase"></i>Why Python?</div><div class="concept-body">The instructor learned C & C++ but struggled to get industry work. Python unlocked freelancing via web scraping, GUIs, and Flask apps. It showed real‑world use of programming.</div></div>
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-code-branch"></i>Walrus Operator</div><div class="concept-body">Python has added new features like the Walrus Operator <code>(:=)</code>, which allows assignment inside expressions. The course will cover all such modern additions.</div></div>
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-download"></i>pip install</div><div class="concept-body">External Python libraries/modules are installed using <code>pip install &lt;package&gt;</code> from the terminal. This is needed before running projects that depend on third‑party packages.</div></div>
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-globe"></i>Replit</div><div class="concept-body">An online coding platform linked in the course description where students can run Python code without local setup.</div></div>
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-face-smile"></i>Haar Cascade</div><div class="concept-body">A face‑detection algorithm used in the Face Recognition project. It identifies and locates faces within an image.</div></div>
+      <div class="concept-card"><div class="concept-title"><i class="fas fa-random"></i>random module</div><div class="concept-body">A built‑in Python module used in the Love Calculator project to generate random percentages for fun results.</div></div>
+    </div>
+  </section>
+
+  <!-- 02 Code examples (from D2.pdf) -->
+  <section id="code-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[02]</span><h2 class="sec-title">Code examples by CWH</h2></div>
+    <div class="code-showcase">
+
+      <!-- Jarvis (pseudocode) -->
+      <div class="code-card" id="card-jarvis">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">jarvis.py</span>
+          <div class="action-buttons">
+            <button class="run-btn" onclick="runCode(this)"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="kw">import</span> webbrowser
+
+command <span class="op">=</span> <span class="fn">input</span>(<span class="str">"Jarvis, what should I open? "</span>).strip().lower()
+
+<span class="kw">if</span> <span class="str">"google"</span> <span class="kw">in</span> command:
+    webbrowser.<span class="fn">open</span>(<span class="str">"https://www.google.com"</span>)
+<span class="kw">elif</span> <span class="str">"youtube"</span> <span class="kw">in</span> command:
+    webbrowser.<span class="fn">open</span>(<span class="str">"https://www.youtube.com"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Command not recognized."</span>)</pre>
+        <div class="output-data" style="display:none;">Opens Google or YouTube in browser based on command</div>
+        <div class="output-area"></div>
+      </div>
+
+      <!-- Love Calculator -->
+      <div class="code-card" id="card-love">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">love_calculator.py</span>
+          <div class="action-buttons">
+            <button class="run-btn" onclick="runCode(this)"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="kw">import</span> random
+
+name1 <span class="op">=</span> <span class="fn">input</span>(<span class="str">"Enter your name:"</span>)
+name2 <span class="op">=</span> <span class="fn">input</span>(<span class="str">"Enter partner's name:"</span>)
+love <span class="op">=</span> random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">100</span>)
+<span class="fn">print</span>(<span class="str">f"Love between {name1} and {name2} is {love}%"</span>)</pre>
+        <div class="output-data" style="display:none;">Enter your name: Harry
+Enter partner's name: Payal
+Love between Harry and Payal is 97%</div>
+        <div class="output-area"></div>
+      </div>
+
+      <!-- Snake Game basic structure -->
+      <div class="code-card" id="card-snake">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">snake_game.py</span>
+          <div class="action-buttons">
+            <button class="run-btn" onclick="runCode(this)"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt"># Requires: pip install pygame</span>
+<span class="kw">import</span> pygame, random, time
+
+pygame.<span class="fn">init</span>()
+WIN <span class="op">=</span> pygame.<span class="fn">display.set_mode</span>((<span class="num">600</span>, <span class="num">400</span>))
+pygame.display.<span class="fn">set_caption</span>(<span class="str">"Snake Game"</span>)
+clock <span class="op">=</span> pygame.time.Clock()
+
+snake <span class="op">=</span> [(<span class="num">300</span>, <span class="num">200</span>)]
+food <span class="op">=</span> (random.<span class="fn">randint</span>(<span class="num">0</span>,<span class="num">59</span>)<span class="op">*</span><span class="num">10</span>, random.<span class="fn">randint</span>(<span class="num">0</span>,<span class="num">39</span>)<span class="op">*</span><span class="num">10</span>)
+direction <span class="op">=</span> (<span class="num">10</span>, <span class="num">0</span>)
+running <span class="op">=</span> <span class="kw">True</span>
+
+<span class="kw">while</span> running:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+        <span class="kw">if</span> event.type <span class="op">==</span> pygame.QUIT:
+            running <span class="op">=</span> <span class="kw">False</span>
+    WIN.<span class="fn">fill</span>((<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))
+    pygame.draw.<span class="fn">rect</span>(WIN, (<span class="num">255</span>,<span class="num">0</span>,<span class="num">0</span>), (<span class="op">*</span>food, <span class="num">10</span>, <span class="num">10</span>))
+    <span class="kw">for</span> seg <span class="kw">in</span> snake:
+        pygame.draw.<span class="fn">rect</span>(WIN, (<span class="num">255</span>,<span class="num">255</span>,<span class="num">255</span>), (<span class="op">*</span>seg, <span class="num">10</span>, <span class="num">10</span>))
+    pygame.display.<span class="fn">update</span>()
+    clock.<span class="fn">tick</span>(<span class="num">15</span>)
+pygame.<span class="fn">quit</span>()</pre>
+        <div class="output-data" style="display:none;">Opens Snake Game window with black snake and red food</div>
+        <div class="output-area"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Syntax explained (from PDF table) -->
+  <section id="syntax-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[03]</span><h2 class="sec-title">Syntax explained</h2></div>
+    <div class="syntax-table">
+      <table><thead><tr><th>SYNTAX</th><th>DESCRIPTION</th></tr></thead><tbody>
+        <tr><td>import random</td><td>Imports the random module for generating random numbers</td></tr>
+        <tr><td>random.randint(1, 100)</td><td>Returns a random integer between 1 and 100 (inclusive)</td></tr>
+        <tr><td>input("prompt")</td><td>Takes user input as a string</td></tr>
+        <tr><td>pip install &lt;pk&gt;</td><td>Terminal command to install a third‑party Python package</td></tr>
+        <tr><td>webbrowser.open(url)</td><td>Opens the given URL in the default web browser</td></tr>
+        <tr><td>pygame.init()</td><td>Initializes all pygame modules before use</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 04 Tips & Warnings (from PDF) -->
+  <section id="tips-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[04]</span><h2 class="sec-title">Tips & Warnings</h2></div>
+    <div class="steps-container">
+      <!-- tips (yellow) -->
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Bookmark the 100 Days of Code playlist so you do not miss any day.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Try running the shared code using "pip install" for any missing modules.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Use Replit (link in description) to run code online without local setup.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Come back to these projects as you progress — they will make more sense later.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Python is a great language for real‑world freelancing (web scraping, GUIs, Flask).</div></div>
+      </div>
+      <!-- warnings (red) -->
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Do NOT try to recreate the showcase projects from scratch yet — it will frustrate you.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">If you get "No module named X" error, install it with: pip install X</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Jarvis and some projects use Windows API — they may not work on Mac/Linux right now.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Do not skip days — missing videos means missing foundational concepts.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Step-by-step walkthrough (from PDF page 4-5) -->
+  <section id="walkthrough-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[05]</span><h2 class="sec-title">Step-by‑step walkthrough</h2></div>
+    <div class="steps-container">
+      <div class="step-item"><div class="step-left"><div class="step-badge">01</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Jarvis</div><div class="step-desc">Instructor runs Jarvis — types a command like "Jarvis, Open YouTube". Jarvis detects the keyword and opens the corresponding website using webbrowser module.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">02</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Love Calculator</div><div class="step-desc">Instructor enters "Harry" and "Payal"; random module returns 97%.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">03</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Face Recognition</div><div class="step-desc">Runs script on an image file (e.g., 1.jpg); Haar Cascade detects and highlights all faces.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">04</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Flappy Bird</div><div class="step-desc">Instructor plays the game built entirely in Python using pygame.</div></div></div>
+      <div class="step-item"><div class="step-left"><div class="step-badge">05</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Snake Game</div><div class="step-desc">Snake (black dot) chases food (red dot); instructor scores 100, beating high score of 90.</div></div></div>
+    </div>
+  </section>
+
+  <!-- 06 Quick summary (from PDF page 5) -->
+  <section id="summary-section" class="reveal-section">
+    <div class="sec-header"><span class="sec-num">[06]</span><h2 class="sec-title">Quick summary</h2></div>
+    <div class="summary-grid">
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Python helped instructor do real‑world freelancing; more practical than C/C++ for industry.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>5 Projects shown: Jarvis, Love Calculator, Face Recognition, Flappy Bird, Snake Game.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>New Python features like Walrus Operator will be covered in this course.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Use pip install to add missing modules before running any project.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Do NOT try to build projects from scratch yet — learn step by step.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Bookmark the playlist; Replit link is in the description for online coding.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Some projects are Windows‑only (e.g., Jarvis voice features) — covered later for other OS.</span></div>
+      <div class="summary-item"><i class="fas fa-check-circle"></i><span>Goal: convert your own ideas into real Python programs by the end of 100 days.</span></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+   <i class="fab fa-python" style="margin-right:8px;"></i>
+  Python · Day 02 · 100 Days Of Code · refined notes
+  <br><br>
+  <span style="color:#777;font-size:12px;">
+    Notes inspired by the tutorial by Code With Harry —
+    <a href="https://youtu.be/Tto8TS-fJQU?si=IvC4t7uYqUGql_81"
+       target="_blank"
+       style="color:#5f8cff;text-decoration:none;">
+       Visit the YT lecture of Day 02
+    </a>
+  </span>
+</footer>
+
+<!-- modal for day selector -->
+<div class="modal-overlay" id="dayModal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <div class="modal-title">📅 Select a day</div>
+    <div class="day-grid" id="dayGrid"></div>
+  </div>
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.closest('.code-card').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = '<i class="fas fa-check"></i> copied';
+    setTimeout(() => btn.innerHTML = '<i class="far fa-copy"></i> copy', 1800);
+  });
+}
+
+function runCode(btn) {
+  const card = btn.closest('.code-card');
+  const outputDiv = card.querySelector('.output-area');
+  const hiddenOutput = card.querySelector('.output-data');
+  
+  if (outputDiv.classList.contains('show')) {
+    outputDiv.classList.remove('show');
+    btn.classList.remove('active');
+  } else {
+    if (hiddenOutput) {
+      outputDiv.textContent = hiddenOutput.textContent.trim();
+    } else {
+      outputDiv.textContent = '✅ (no output)';
+    }
+    outputDiv.classList.add('show');
+    btn.classList.add('active');
+  }
+}
+
+// scroll reveal
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('.reveal-section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -20px 0px' });
+  sections.forEach(section => observer.observe(section));
+});
+
+// modal logic
+const modal = document.getElementById('dayModal');
+const dayPill = document.getElementById('dayPillBtn');
+const closeBtn = document.getElementById('closeModalBtn');
+const dayGrid = document.getElementById('dayGrid');
+
+// generate buttons day 1..100 with individual redirects
+for (let i = 1; i <= 100; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'day-grid-btn';
+  btn.textContent = `DAY ${i.toString().padStart(2, '0')}`;
+  btn.addEventListener('click', () => {
+    window.location.href = `https://manmit099.github.io/CWH100/Day${i}/`;
+  });
+  dayGrid.appendChild(btn);
+}
+
+dayPill.addEventListener('click', () => {
+  modal.style.display = 'flex';
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+// day/night toggle
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  const icon = themeToggle.querySelector('i');
+  if (document.body.classList.contains('light-mode')) {
+    icon.className = 'fas fa-sun';
+  } else {
+    icon.className = 'fas fa-moon';
+  }
+});
+</script>
+</body>
+</html>
