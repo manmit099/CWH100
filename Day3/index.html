@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 3 · Modules & pip · CWHxMANMIT</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ------- Fluid & Adaptive Variables ------- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface-hover: #151515;
+      --border: #2a2a2a;
+      --blue: #5f8cff;
+      --blue-glow: rgba(95, 140, 255, 0.2);
+      --yellow: #ffd966;
+      --red: #f87171;
+      --green: #6fcf97;
+      --text-primary: #f0f0f0;
+      --text-secondary: #b0b3b8;
+      --code-bg: #0a0a0a;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7);
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --display: 'Syne', sans-serif;
+      --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Light Theme Overrides */
+    .light-mode {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: #cbd5e1;
+      --blue: #2563eb;
+      --blue-glow: rgba(37, 99, 235, 0.2);
+      --yellow: #fbbf24;
+      --red: #ef4444;
+      --green: #10b981;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --code-bg: #f1f5f9;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Universal Smooth Transitions */
+    body, .concept-card, .code-card, .summary-item, header, .code-header, .syntax-table th {
+      transition: background-color var(--transition-smooth), color var(--transition-smooth), border-color var(--transition-smooth);
+    }
+
+    .light-mode .day-pill {
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      color: var(--blue); border-color: var(--blue);
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+    }
+    .light-mode .output-area { background: #eef2f6; color: #1e293b; }
+    .light-mode .step-badge { background: linear-gradient(145deg, #e2e8f0, #cbd5e1); color: var(--blue); }
+    .light-mode .step-badge.tip-badge { color: #b45309; border-color: #fbbf24; }
+    .light-mode .step-badge.warn-badge { color: #b91c1c; border-color: #ef4444; }
+
+    body {
+      background: var(--bg); color: var(--text-primary);
+      font-family: var(--sans); line-height: 1.6;
+      font-size: clamp(14px, 1.5vw, 15.5px);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Hardware Accelerated Noise */
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+      pointer-events: none; z-index: 9999; opacity: 0.25;
+      will-change: transform; transform: translateZ(0); 
+    }
+
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #3a3f4a; border-radius: 20px; }
+
+    main.wrap { max-width: 1000px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 24px) 80px; }
+
+    header {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 28px);
+      display: flex; align-items: center; gap: 12px;
+      font-weight: 500; width: 100%;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .light-mode header { background: rgba(255, 255, 255, 0.7); border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+
+    .snake-icon {
+      font-size: clamp(24px, 4vw, 28px);
+      background: linear-gradient(135deg, #4584b6 0%, #4584b6 40%, #ffde57 60%, #ffde57 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 0 4px rgba(69,132,182,0.6));
+    }
+
+    .theme-toggle { margin-right: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; background: transparent;}
+    .theme-toggle:active, .day-pill:active, .nav-btn:active, .run-btn:active, .copy-btn:active, .day-grid-btn:active { transform: scale(0.95); }
+
+    .header-right { display: flex; align-items: center; gap: clamp(8px, 2vw, 12px); margin-left: auto; }
+    .circular-logo {
+      width: clamp(28px, 5vw, 36px); height: clamp(28px, 5vw, 36px);
+      border-radius: 40px; object-fit: cover; border: 2px solid var(--blue);
+      box-shadow: 0 0 8px var(--blue-glow); background: var(--surface);
+    }
+
+    .day-pill {
+      background: linear-gradient(145deg, #1f2535, #131725);
+      border: 1px solid var(--blue); color: var(--blue); font-family: var(--mono);
+      font-size: clamp(10px, 2vw, 12px); font-weight: 600; padding: 6px clamp(10px, 2vw, 16px);
+      border-radius: 40px; box-shadow: 0 0 12px rgba(95,140,255,0.3); cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .day-pill:hover { background: #1f2a3f; transform: translateY(-2px); }
+
+    .separator-x {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: clamp(20px, 3vw, 24px); height: clamp(20px, 3vw, 24px);
+      border-radius: 40px; background: rgba(95,140,255,0.1); border: 1px solid var(--blue);
+      color: var(--blue); font-size: clamp(12px, 2vw, 14px); font-weight: bold;
+      font-family: var(--mono); box-shadow: 0 0 6px var(--blue-glow);
+    }
+
+    .hero { padding: clamp(40px, 8vw, 64px) 0 clamp(24px, 5vw, 40px); text-align: center; }
+    .hero h1 {
+      font-family: var(--display); font-size: clamp(32px, 7vw, 62px); font-weight: 800; line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 0%, #bdd3ff 80%); -webkit-background-clip: text;
+      background-clip: text; color: transparent; letter-spacing: -0.02em;
+    }
+    .light-mode .hero h1 { background: linear-gradient(135deg, #0f172a 0%, #2563eb 80%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-meta { font-family: var(--mono); color: var(--text-secondary); margin-top: 12px; font-size: clamp(11px, 2vw, 13px); border-bottom: 1px dashed var(--border); display: inline-block; padding-bottom: 8px; }
+
+    /* Nav Buttons and Icons (RESTORED) */
+    .concept-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0 10px; padding: 10px 0; }
+    .nav-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+      font-family: var(--mono); font-size: clamp(11px, 2vw, 12px); padding: 6px clamp(12px, 3vw, 18px);
+      border-radius: 40px; cursor: pointer; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .nav-btn i {
+      font-size: 12px;
+      color: var(--blue);
+      opacity: 0.8;
+    }
+    .nav-btn:hover { border-color: var(--blue); color: var(--text-primary); background: rgba(95,140,255,0.08); transform: translateY(-2px); }
+
+    section { scroll-margin-top: 100px; }
+
+    /* --- Continuous Two-Way Reveal Animation --- */
+    .reveal-item {
+      opacity: 0; 
+      transform: scale(0.96) translateY(10px);
+      transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-item.visible { 
+      opacity: 1; 
+      transform: scale(1) translateY(0); 
+    }
+
+    .sec-header { display: flex; align-items: baseline; gap: clamp(12px, 3vw, 18px); margin: clamp(40px, 8vw, 56px) 0 24px; }
+    .sec-num { font-family: var(--mono); font-size: clamp(11px, 2vw, 13px); font-weight: 700; color: var(--blue); background: rgba(95,140,255,0.1); border: 1px solid rgba(95,140,255,0.3); padding: 4px 14px; border-radius: 30px; white-space: nowrap; }
+    .sec-title { font-family: var(--display); font-size: clamp(20px, 4vw, 24px); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; }
+
+    /* Fluid Auto-fit Grid that respects absolute minimums */
+    .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+    .concept-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; border-left: 3px solid var(--blue); }
+    .concept-card:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3); }
+    
+    /* Concept Icons (RESTORED) */
+    .concept-title { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .concept-title i {
+      font-size: 16px;
+      width: 22px;
+      color: var(--blue);
+    }
+    .concept-body { color: var(--text-secondary); }
+    .concept-body code, .step-desc code, .summary-item code { font-family: var(--mono); font-size: 0.9em; background: var(--code-bg); color: var(--yellow); padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border); }
+
+    .code-showcase { display: flex; flex-direction: column; gap: 22px; }
+    .code-card { background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow); }
+    .code-header { display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: #0d0d0d; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .window-dots { display: flex; gap: 6px; }
+    .window-dots span { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red { background: #ff5f57; } .dot-yellow { background: #febc2e; } .dot-green { background: #28c840; }
+    .code-title { margin-left: 8px; font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+    
+    .action-buttons { margin-left: auto; display: flex; gap: 8px; }
+    .run-btn, .copy-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 10px; border-radius: 30px; font-size: 11px; font-family: var(--mono); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 5px; }
+    .run-btn:hover, .run-btn.active { background: var(--green); border-color: var(--green); color: #000; }
+    .copy-btn:hover { background: var(--blue); border-color: var(--blue); color: #000; }
+    .code-card pre { padding: 20px; font-family: var(--mono); font-size: clamp(12px, 2vw, 13px); line-height: 1.7; overflow-x: auto; white-space: pre; background: var(--code-bg); margin: 0; border-bottom: 1px solid var(--border); }
+    .output-area { background: #0a0a0a; padding: 14px 20px; font-family: var(--mono); font-size: clamp(12px, 2vw, 13px); color: #b0e0b0; border-top: 1px solid var(--border); white-space: pre-wrap; display: none; animation: fadeIn 0.3s ease; }
+    .output-area.show { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    .kw { color: #c792ea; } .fn { color: #82aaff; } .str { color: #c3e88d; } .num { color: #f78c6c; } .cmt { color: #546e7a; font-style: italic; }
+
+    .syntax-table { border: 1px solid var(--border); border-radius: var(--radius-md); overflow-x: auto; }
+    .syntax-table table { width: 100%; border-collapse: collapse; background: var(--surface); min-width: 400px; }
+    .syntax-table th { background: #0d0d0d; font-family: var(--mono); font-size: 12px; color: var(--blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 14px 18px; text-align: left; }
+    .syntax-table td { padding: 12px 18px; border-top: 1px solid var(--border); color: var(--text-secondary); }
+    .syntax-table td:first-child { font-family: var(--mono); color: var(--yellow); }
+
+    .steps-container { display: flex; flex-direction: column; }
+    .step-item { display: flex; gap: 16px; }
+    .step-left { display: flex; flex-direction: column; align-items: center; width: 50px; flex-shrink: 0; }
+    .step-badge { width: 44px; height: 44px; background: linear-gradient(145deg, #202532, #12161f); border: 2px solid var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--blue); box-shadow: 0 0 10px var(--blue-glow); }
+    .step-badge.tip-badge { border-color: var(--yellow); color: var(--yellow); }
+    .step-badge.warn-badge { border-color: var(--red); color: var(--red); }
+    .step-line { width: 2px; background: var(--border); flex: 1; margin: 4px 0; min-height: 20px; }
+    .step-item:last-child .step-line { display: none; }
+    .step-content { padding: 4px 0 28px 8px; flex: 1; }
+    .step-title { font-family: var(--mono); font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .step-desc { color: var(--text-secondary); }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+    .summary-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 18px; display: flex; gap: 12px; color: var(--text-secondary); }
+    .summary-item:hover { transform: translateX(4px); border-color: var(--blue); background: var(--surface-hover); }
+    .summary-item i { color: var(--green); font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+
+    footer { margin-top: 80px; border-top: 1px solid var(--border); padding: 28px; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; z-index: 10000;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+    .modal-content {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; padding: clamp(20px, 5vw, 28px);
+      position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      transform: scale(0.95) translateY(10px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.show .modal-content { transform: scale(1) translateY(0); }
+    .modal-close { position: absolute; top: 16px; right: 20px; background: transparent; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; transition: 0.2s; line-height: 1; }
+    .modal-close:hover { color: var(--red); transform: rotate(90deg); }
+    .modal-title { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+    .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 10px; }
+    .day-grid-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--mono); font-size: 12px; padding: 8px 4px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; text-align: center; white-space: nowrap; }
+    .day-grid-btn:hover { border-color: var(--blue); color: var(--text-primary); background: rgba(95,140,255,0.08); transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+<header>
+  <i class="fab fa-python snake-icon"></i>
+  <button class="theme-toggle day-pill" id="themeToggle" aria-label="Switch between dark and light mode">
+    <i class="fas fa-moon"></i>
+  </button>
+  <div class="header-right">
+    <span class="day-pill" id="dayPillBtn"><i class="far fa-calendar-alt" style="margin-right:6px;"></i>DAY 03</span>
+    <img src="logo01.jpg" alt="logo 1" class="circular-logo">
+    <span class="separator-x">×</span>
+    <img src="logo02.jpg" alt="logo 2" class="circular-logo">
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero reveal-item">
+    <h1>Modules &amp; pip</h1>
+    <div class="hero-meta">📘 Day 3 · 100 Days Of Code · CWHxMANMIT</div>
+  </div>
+
+  <div class="concept-nav reveal-item">
+    <a class="nav-btn" href="#concept-section"><i class="fas fa-cube"></i> Concept</a>
+    <a class="nav-btn" href="#code-section"><i class="fas fa-code"></i> Code</a>
+    <a class="nav-btn" href="#syntax-section"><i class="fas fa-hashtag"></i> Syntax</a>
+    <a class="nav-btn" href="#tips-section"><i class="fas fa-lightbulb"></i> Tips</a>
+    <a class="nav-btn" href="#walkthrough-section"><i class="fas fa-stairs"></i> Walkthrough</a>
+    <a class="nav-btn" href="#summary-section"><i class="fas fa-check-double"></i> Summary</a>
+  </div>
+
+  <section id="concept-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[01]</span><h2 class="sec-title">Concept explanations</h2></div>
+    <div class="concept-grid">
+
+      <div class="concept-card reveal-item">
+        <div class="concept-title"><i class="fas fa-puzzle-piece"></i>Modules</div>
+        <div class="concept-body">Modules are code libraries that let you borrow and reuse someone else's well-tested code inside your own program using the <code>import</code> keyword.</div>
+      </div>
+
+      <div class="concept-card reveal-item">
+        <div class="concept-title"><i class="fas fa-layer-group"></i>Built-in Modules</div>
+        <div class="concept-body">These ship with Python itself — no installation required. Examples: <code>hashlib</code>, <code>os</code>, <code>math</code>, <code>random</code>. Like a plate or spoon already in your house.</div>
+      </div>
+
+      <div class="concept-card reveal-item">
+        <div class="concept-title"><i class="fas fa-box-open"></i>External Modules</div>
+        <div class="concept-body">Written by the community, hosted online, and must be installed before use. Examples: <code>pandas</code>, <code>scikit-learn</code> (sklearn), <code>tensorflow</code>. Like buying milk daily — you go get it first.</div>
+      </div>
+
+      <div class="concept-card reveal-item">
+        <div class="concept-title"><i class="fas fa-shopping-cart"></i>pip — Package Manager</div>
+        <div class="concept-body">pip is a package manager for Python. Just like you go to a shop to buy groceries, pip goes to the internet and fetches whatever module you ask for and installs it. Use <code>pip3</code> on Mac/Linux and <code>pip</code> on Windows.</div>
+      </div>
+
+      <div class="concept-card reveal-item">
+        <div class="concept-title"><i class="fas fa-terminal"></i>REPL</div>
+        <div class="concept-body">Read, Evaluate, Print, Loop — the interactive Python shell you get by typing <code>python3</code> in your terminal. Useful for quick experiments but not for writing full programs.</div>
+      </div>
+
+      <div class="concept-card reveal-item">
+        <div class="concept-title"><i class="fas fa-clock"></i>Why Use Modules?</div>
+        <div class="concept-body">Modules save time, reduce human error, and let you focus on the real problem. The code inside modules is well-tested and written by experts — no need to reinvent the wheel.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="code-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[02]</span><h2 class="sec-title">Code examples (from video)</h2></div>
+    <div class="code-showcase" id="code-container">
+
+      <div class="code-card reveal-item" id="card-install">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">terminal_install.py</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt"># Install pandas from terminal</span>
+<span class="cmt"># Mac / Linux:</span>
+<span class="cmt"># pip3 install pandas</span>
+<span class="cmt"># Windows:</span>
+<span class="cmt"># pip install pandas</span></pre>
+        <div class="output-data" style="display:none;">(Terminal command — run outside of Python)</div>
+        <div class="output-area"></div>
+      </div>
+
+      <div class="code-card reveal-item" id="card-hashlib">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">builtin_module.py</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt"># Import and use a built-in module</span>
+<span class="kw">import</span> hashlib
+<span class="fn">print</span>(<span class="str">"hashlib imported successfully"</span>)</pre>
+        <div class="output-data" style="display:none;">hashlib imported successfully</div>
+        <div class="output-area"></div>
+      </div>
+
+      <div class="code-card reveal-item" id="card-moderr">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">module_not_found.py</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt"># Attempting to import a module that is NOT installed</span>
+<span class="kw">import</span> sklearn</pre>
+        <div class="output-data" style="display:none;">ModuleNotFoundError: No module named 'sklearn'</div>
+        <div class="output-area"></div>
+      </div>
+
+      <div class="code-card reveal-item" id="card-sklearn">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">install_sklearn.py</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt"># Terminal: pip3 install scikit-learn</span>
+<span class="cmt"># Then import in your script:</span>
+<span class="kw">import</span> sklearn
+<span class="fn">print</span>(<span class="str">"sklearn imported successfully"</span>)</pre>
+        <div class="output-data" style="display:none;">sklearn imported successfully</div>
+        <div class="output-area"></div>
+      </div>
+
+      <div class="code-card reveal-item" id="card-main">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">main.py</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt"># main.py — simple program with pandas imported</span>
+<span class="kw">import</span> pandas
+<span class="fn">print</span>(<span class="str">"Hi"</span>)</pre>
+        <div class="output-data" style="display:none;">Hi</div>
+        <div class="output-area"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="syntax-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[03]</span><h2 class="sec-title">Syntax explained</h2></div>
+    <div class="syntax-table reveal-item">
+      <table><thead><tr><th>SYNTAX</th><th>DESCRIPTION</th></tr></thead><tbody>
+        <tr><td>pip install</td><td>Install an external module (Windows)</td></tr>
+        <tr><td>pip3 install</td><td>Install an external module (Mac / Linux)</td></tr>
+        <tr><td>import</td><td>Import a module into your Python script</td></tr>
+        <tr><td>python3</td><td>Open REPL / run Python on Mac/Linux</td></tr>
+        <tr><td>python</td><td>Open REPL / run Python on Windows</td></tr>
+        <tr><td>Exit()</td><td>Exit the Python REPL</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section id="tips-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[04]</span><h2 class="sec-title">Tips &amp; Warnings</h2></div>
+    <div class="steps-container">
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Use <code>pip3</code> on Mac/Linux and <code>pip</code> on Windows to install packages correctly.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Replit auto-installs missing packages when you run your code — great for beginners.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Always use the latest stable Python 3 version; minor version differences (3.7, 3.11) do not matter for basics.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Built-in modules (e.g. <code>hashlib</code>) do NOT need to be installed — just import them directly.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">The package install name and the import name can differ: install <code>scikit-learn</code>, import as <code>sklearn</code>.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Use modules to save time and avoid re-inventing the wheel on large projects.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Confusing pip name vs import name — e.g. you install <code>scikit-learn</code> but must import as <code>sklearn</code>.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Trying to import an external module without installing it first causes <code>ModuleNotFoundError</code>.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">On Mac/Linux, using <code>pip</code> instead of <code>pip3</code> may point to Python 2 and cause issues.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-desc">Do not worry about Python version differences (3.7 vs 3.11) for beginner programs — basics stay the same. Python 4/5 may introduce breaking changes in the future.</div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="walkthrough-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[05]</span><h2 class="sec-title">Step-by-step walkthrough</h2></div>
+    <div class="steps-container">
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">01</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Verify pip</div><div class="step-desc">Open the terminal and type <code>pip3</code> (Mac/Linux) or <code>pip</code> (Windows) to verify pip is available.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">02</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Install pandas</div><div class="step-desc">Run <code>pip3 install pandas</code> to install the pandas library from the internet.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">03</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Verify in REPL</div><div class="step-desc">Enter <code>python3</code> in the terminal to open the REPL and type <code>import pandas</code> — no error means success.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">04</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Trigger the error</div><div class="step-desc">Try <code>import sklearn</code> — you will see <code>ModuleNotFoundError</code> because it is not installed yet.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">05</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Install scikit-learn</div><div class="step-desc">Exit REPL with <code>Exit()</code>, then run <code>pip3 install scikit-learn</code> to install it.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">06</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Import sklearn</div><div class="step-desc">Re-enter REPL and type <code>import sklearn</code> — it now works with no error.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">07</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Try Replit auto-install</div><div class="step-desc">In Replit, create <code>main.py</code>, write <code>import pandas</code> and <code>print("Hi")</code>, then run — Replit auto-installs pandas and prints <strong>Hi</strong>.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">08</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Explore built-in modules</div><div class="step-desc">Search "Built-in Modules in Python" to find modules like <code>hashlib</code> that need no installation step.</div></div>
+      </div>
+
+      <div class="step-item reveal-item">
+        <div class="step-left"><div class="step-badge">09</div><div class="step-line"></div></div>
+        <div class="step-content"><div class="step-title">Use hashlib instantly</div><div class="step-desc">Write <code>import hashlib</code> in <code>main.py</code> and run — it works instantly with no pip install required.</div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="summary-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[06]</span><h2 class="sec-title">Quick summary</h2></div>
+    <div class="summary-grid">
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Modules = reusable code libraries.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Built-in modules ship with Python — no install needed (e.g. <code>hashlib</code>, <code>os</code>).</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>External modules must be installed via pip (e.g. <code>pandas</code>, <code>sklearn</code>, <code>tensorflow</code>).</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>pip is Python's package manager; use <code>pip3</code> on Mac/Linux.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Syntax: use <code>import</code> to load any module.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Install name vs import name can differ — install <code>scikit-learn</code>, import as <code>sklearn</code>.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>REPL = interactive Python shell; type <code>Exit()</code> to leave.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Replit auto-installs missing packages on first run.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Use modules to save time, reduce errors, and work on bigger projects.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Python version (3.7–3.11) does not matter much for beginners.</span></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <i class="fab fa-python" style="margin-right:8px;"></i>
+  Python · Day 03 · 100 Days Of Code · refined notes
+  <br><br>
+  <span style="color:var(--text-secondary);font-size:12px;">
+    Notes inspired by the tutorial by Code With Harry —
+    <a href="https://youtu.be/xwKO_y2gHxQ?si=m1lgX-VlHwPHMUv6" target="_blank" style="color:var(--blue);text-decoration:none;">Visit the YT lecture of Day 3</a>
+  </span>
+</footer>
+
+<div class="modal-overlay" id="dayModal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <div class="modal-title">📅 Select a day</div>
+    <div class="day-grid" id="dayGrid"></div>
+  </div>
+</div>
+
+<script>
+// --- Bulletproof Event Delegation for Buttons ---
+document.getElementById('code-container').addEventListener('click', function(e) {
+  const copyBtn = e.target.closest('.copy-btn');
+  if (copyBtn) {
+    if (copyBtn.classList.contains('active')) return; // Prevents fast-click overwrite bug
+    
+    const pre = copyBtn.closest('.code-card').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      const originalText = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
+      copyBtn.classList.add('active');
+      setTimeout(() => {
+        copyBtn.innerHTML = originalText;
+        copyBtn.classList.remove('active');
+      }, 2000);
+    });
+    return;
+  }
+
+  const runBtn = e.target.closest('.run-btn');
+  if (runBtn) {
+    const card = runBtn.closest('.code-card');
+    const outputDiv = card.querySelector('.output-area');
+    const hiddenOutput = card.querySelector('.output-data');
+    
+    if (outputDiv.classList.contains('show')) {
+      outputDiv.classList.remove('show');
+      runBtn.classList.remove('active');
+    } else {
+      outputDiv.textContent = hiddenOutput ? hiddenOutput.textContent.trim() : '✅ (no output)';
+      outputDiv.classList.add('show');
+      runBtn.classList.add('active');
+    }
+  }
+});
+
+// --- Two-Way Continuous Scroll Reveal ---
+document.addEventListener('DOMContentLoaded', function() {
+  const items = document.querySelectorAll('.reveal-item');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        entry.target.classList.remove('visible');
+      }
+    });
+  }, { 
+    threshold: 0.1, 
+    rootMargin: '0px 0px -10px 0px' 
+  });
+  
+  items.forEach(item => observer.observe(item));
+});
+
+// --- Modal & Theme Logic ---
+const modal = document.getElementById('dayModal');
+const dayGrid = document.getElementById('dayGrid');
+
+for (let i = 1; i <= 100; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'day-grid-btn';
+  btn.textContent = `Day ${i.toString().padStart(2, '0')}`;
+  btn.addEventListener('click', () => { window.location.href = `https://manmit099.github.io/CWH100/Day${i}/`; });
+  dayGrid.appendChild(btn);
+}
+
+document.getElementById('dayPillBtn').addEventListener('click', () => modal.classList.add('show'));
+document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('show'));
+modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  themeToggle.querySelector('i').className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+});
+</script>
+</body>
+</html>
